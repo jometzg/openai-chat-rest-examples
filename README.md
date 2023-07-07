@@ -273,6 +273,10 @@ In this sample, the [Azure Search](https://learn.microsoft.com/en-us/azure/searc
 This is very powerful and so can have numerous uses cases inside a business, one example being an HR bot which looks only at internal HR documentation that is employee-facing.
 
 ```
+@seachservice = YOUR_SEARCH_SERVICE_NAME
+@searchkey = THE_ABOVE_ADMIN_KEY
+@searchindex = "openid"
+
 POST https://{{deployment}}.openai.azure.com/openai/deployments/{{model}}/extensions/chat/completions?api-version=2023-06-01-preview
 api-key: {{api-key}}
 Content-Type: application/json
@@ -310,3 +314,8 @@ This results in a rather large document, with citations, but then this JSON:
           "end_turn": true
         }
 ```
+
+As can be seen, this is potentially really powerful and has plenty of potential.
+
+# Summary
+Hopefully this repo will help you explore and understand the REST API to Azure OpenAI and that this understanding will streamline your ability to produce useful business services with Azure OpenAI.
