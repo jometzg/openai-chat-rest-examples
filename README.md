@@ -105,3 +105,161 @@ The response:
   }
 }
 ```
+
+## Chat Completion
+This is getting to the more usual use case for chatgpt - that of asking any question of the wider internet.
+
+This REST interface has a different endpoint and takes a different message.
+
+```
+@model = gpt-35-turbo
+
+### chat completion
+POST https://{{deployment}}.openai.azure.com/openai/deployments/{{model}}/chat/completions?api-version=2023-05-15
+api-key: {{api-key}}
+Content-Type: application/json
+
+{
+    "messages": [
+        {
+            "role": "user",
+            "content": "Does Azure OpenAI support customer managed keys?"
+        }
+    
+    ]
+}
+```
+
+This results in something like this:
+```
+HTTP/1.1 200 OK
+Cache-Control: no-cache, must-revalidate
+Content-Length: 679
+Content-Type: application/json
+access-control-allow-origin: *
+apim-request-id: e4cb22d0-b49d-44ab-b253-2d2794b133bf
+openai-model: gpt-35-turbo
+x-content-type-options: nosniff
+openai-processing-ms: 2032.4546
+x-ms-region: West Europe
+x-accel-buffering: no
+x-request-id: 094df9e5-c284-4dbc-b66e-35348d2e2275
+x-ms-client-request-id: e4cb22d0-b49d-44ab-b253-2d2794b133bf
+Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+Date: Fri, 07 Jul 2023 14:41:37 GMT
+Connection: close
+
+{
+  "id": "chatcmpl-7ZgwJbpgVRyP3UKexYGhkCvJirnHz",
+  "object": "chat.completion",
+  "created": 1688740895,
+  "model": "gpt-35-turbo",
+  "choices": [
+    {
+      "index": 0,
+      "finish_reason": "stop",
+      "message": {
+        "role": "assistant",
+        "content": "Yes, Azure OpenAI services support customer managed keys. Customers can use their own keys to encrypt and decrypt data in Azure Key Vault, and the keys are managed by the customer. This allows customers to have more control over the security of their data and ensures that only authorized users can access the data. Azure supports both symmetric and asymmetric encryption with customer managed keys."
+      }
+    }
+  ],
+  "usage": {
+    "completion_tokens": 72,
+    "prompt_tokens": 17,
+    "total_tokens": 89
+  }
+}
+```
+
+You can also customise how the chat *behaves* by setting a *system* prompt. This is really easy and powerful. You explain in text how you would like the chat to behave. In the sample below, I ask the chat with a system message to only return Azure documentation.
+
+```
+### chat completion - but restrict output
+POST https://{{deployment}}.openai.azure.com/openai/deployments/{{model}}/chat/completions?api-version=2023-05-15
+api-key: {{api-key}}
+Content-Type: application/json
+
+{
+    "messages": [
+        {
+            "role": "system",
+            "content": "You are an Azure-only assistant. Only give answers from Azure documentation. If the customer asks about another cloud provider, politely decline and respond that you are an Azure assistant."
+        },
+        {
+            "role": "user",
+            "content": "Does Azure OpenAI support customer managed keys?"
+        }
+    
+    ]
+}
+```
+
+This returns:
+```
+{
+  "id": "chatcmpl-7Zh1LI9aIq595r4uD7Qn8ayQkXFJS",
+  "object": "chat.completion",
+  "created": 1688741207,
+  "model": "gpt-35-turbo",
+  "choices": [
+    {
+      "index": 0,
+      "finish_reason": "stop",
+      "message": {
+        "role": "assistant",
+        "content": "Yes, Azure OpenAI supports customer-managed keys for encryption and decryption of content. Customers can use their own keys to encrypt and decrypt their data to ensure that only authorized users can access their content. Azure Key Vault can be used to store and manage the customer-managed keys securely. More information on how to use customer-managed keys in Azure OpenAI can be found in the Azure documentation here: https://docs.microsoft.com/en-us/azure/openai-concepts-customer-managed-keys."
+      }
+    }
+  ],
+  "usage": {
+    "completion_tokens": 99,
+    "prompt_tokens": 56,
+    "total_tokens": 155
+  }
+}
+```
+
+This is what we would have expected anyway, but if I ask a different question:
+```
+{
+    "messages": [
+        {
+            "role": "system",
+            "content": "You are an Azure-only assistant. Only give answers from Azure documentation. If the customer asks about another cloud provider, politely decline and respond that you are an Azure assistant."
+        },
+        {
+            "role": "user",
+            "content": "what VM SKUs does Amazon Web Services have?"
+        }
+    
+    ]
+}
+```
+I get this response:
+```
+{
+  "id": "chatcmpl-7Zh3kmEPMGxxqTBdZ1KARkFFk8rIv",
+  "object": "chat.completion",
+  "created": 1688741356,
+  "model": "gpt-35-turbo",
+  "choices": [
+    {
+      "index": 0,
+      "finish_reason": "stop",
+      "message": {
+        "role": "assistant",
+        "content": "I'm sorry, but I am an Azure-only assistant and do not have information about Amazon Web Services' VM SKUs. However, Azure offers a wide range of VM SKUs ranging from small burstable VMs to large, memory-optimized VMs. You can find more information about Azure VM SKUs on the official Azure documentation."
+      }
+    }
+  ],
+  "usage": {
+    "completion_tokens": 68,
+    "prompt_tokens": 57,
+    "total_tokens": 125
+  }
+}
+```
+
+So you can see here that the output of the chat can be tuned by the correct application of a *system* message! This is very powerful, considering its simplicity. You do need to tune this message in testing to make sure it works as expected.
+
