@@ -263,3 +263,50 @@ I get this response:
 
 So you can see here that the output of the chat can be tuned by the correct application of a *system* message! This is very powerful, considering its simplicity. You do need to tune this message in testing to make sure it works as expected.
 
+## Chat Completions with Embeddings
+This example is a little more complex and follows the pattern of the Azure Sample [ChatGPT + Enterprise data with Azure OpenAI and Cognitive Search](https://github.com/Azure-Samples/azure-search-openai-demo)
+
+![alt text]([openai-rest-models.png](https://github.com/Azure-Samples/azure-search-openai-demo/raw/main/docs/appcomponents.png)https://github.com/Azure-Samples/azure-search-openai-demo/raw/main/docs/appcomponents.png "Sample App")
+
+In this sample, the [Azure Search](https://learn.microsoft.com/en-us/azure/search/search-what-is-azure-search) is used to index some documents uploaded to Azure blob storage. The OpenAI then uses the Azure search index as it's data source. So the REST call uses both the OpenAI endpoint and also that of Azure Search - essentially it tells OpenAI to look in a specific Azure Search index for its source data and look there only.
+
+This is very powerful and so can have numerous uses cases inside a business, one example being an HR bot which looks only at internal HR documentation that is employee-facing.
+
+```
+POST https://{{deployment}}.openai.azure.com/openai/deployments/{{model}}/extensions/chat/completions?api-version=2023-06-01-preview
+api-key: {{api-key}}
+Content-Type: application/json
+
+{
+    "messages": [
+        {
+            "role": "system",
+            "content": "You are a helpful AI assistant"
+        },
+        {
+            "role": "user",
+            "content": "what documents are there?"
+        }
+    ],
+    "dataSources": [
+        {
+            "type": "AzureCognitiveSearch",
+            "parameters": {
+                "endpoint": "https://{{searchservice}}.search.windows.net",
+                "key": "{{searchkey}}",
+                "indexName": "{{searchindex}}"
+            }
+        }
+    ]
+}
+```
+
+This results in a rather large document, with citations, but then this JSON:
+```
+    {
+          "index": 1,
+          "role": "assistant",
+          "content": "I have retrieved 5 documents for you. The first document is about the Foreign Intelligence Threat Landscape and the democratization of cyber tools [doc1]. The second and third documents are about an Architecture Design Session for Building cloud-native apps with Kubernetes, Serverless and Data [doc2][doc3]. The fourth and fifth documents are about the National Counterintelligence Center's duties, authorities, resources, staffing, location, and structure [doc4][doc5]. Is there anything specific you would like me to find for you?",
+          "end_turn": true
+        }
+```
