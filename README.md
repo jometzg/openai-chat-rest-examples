@@ -34,3 +34,74 @@ Content-Type: application/json
   "max_tokens": 5
 }
 ```
+
+This will return different values each run, but here's one I prepared earlier.
+```
+HTTP/1.1 200 OK
+Cache-Control: no-cache, must-revalidate
+Content-Length: 276
+Content-Type: application/json
+Access-Control-Allow-Origin: *
+apim-request-id: 5da2ae7a-3398-4a62-b505-2e8ab0e78dc8
+Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+x-ms-region: West Europe
+x-content-type-options: nosniff
+Openai-Model: text-davinci-003
+Openai-Processing-Ms: 371.8121
+X-Accel-Buffering: no
+X-Ms-Client-Request-Id: 5da2ae7a-3398-4a62-b505-2e8ab0e78dc8
+X-Request-Id: f1457bc1-f1e7-4871-a2b4-5203b39b2262
+Date: Fri, 07 Jul 2023 14:32:25 GMT
+Connection: close
+
+{
+  "id": "cmpl-7ZgnRaqHBYVzu4oRzH2Ha2vtdM3nw",
+  "object": "text_completion",
+  "created": 1688740345,
+  "model": "text-davinci-003",
+  "choices": [
+    {
+      "text": "\n\nthere was a",
+      "index": 0,
+      "finish_reason": "length",
+      "logprobs": null
+    }
+  ],
+  "usage": {
+    "completion_tokens": 5,
+    "prompt_tokens": 4,
+    "total_tokens": 9
+  }
+}
+```
+or if I increase the number of tokens:
+
+```
+{
+  "prompt": "Once upon a time",
+  "max_tokens": 20
+}
+```
+
+The response:
+```
+{
+  "id": "cmpl-7ZgpXM3NxqEarGmJmfd6J2aI90F8e",
+  "object": "text_completion",
+  "created": 1688740475,
+  "model": "text-davinci-003",
+  "choices": [
+    {
+      "text": ", there lived three siblings, two boys and one girl, in a small village. The boys were",
+      "index": 0,
+      "finish_reason": "length",
+      "logprobs": null
+    }
+  ],
+  "usage": {
+    "completion_tokens": 20,
+    "prompt_tokens": 4,
+    "total_tokens": 24
+  }
+}
+```
