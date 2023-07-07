@@ -266,7 +266,7 @@ So you can see here that the output of the chat can be tuned by the correct appl
 ## Chat Completions with Embeddings
 This example is a little more complex and follows the pattern of the Azure Sample [ChatGPT + Enterprise data with Azure OpenAI and Cognitive Search](https://github.com/Azure-Samples/azure-search-openai-demo)
 
-![alt text]([openai-rest-models.png](https://github.com/Azure-Samples/azure-search-openai-demo/raw/main/docs/appcomponents.png)https://github.com/Azure-Samples/azure-search-openai-demo/raw/main/docs/appcomponents.png "Sample App")
+![alt text](https://github.com/Azure-Samples/azure-search-openai-demo/raw/main/docs/appcomponents.png "Sample App")
 
 In this sample, the [Azure Search](https://learn.microsoft.com/en-us/azure/search/search-what-is-azure-search) is used to index some documents uploaded to Azure blob storage. The OpenAI then uses the Azure search index as it's data source. So the REST call uses both the OpenAI endpoint and also that of Azure Search - essentially it tells OpenAI to look in a specific Azure Search index for its source data and look there only.
 
