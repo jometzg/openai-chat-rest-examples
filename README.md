@@ -13,7 +13,7 @@ In order to do any of these demos, you need to have deployed an Azure OpenAI ser
 
 In addition, you also need to deploy some models into that instance. Note that the region you choose for OpenAI is important as not all models are available in all regions. I personally use *West Europe* as this at the time of writing has good model availability. The models needed will depend on the uses cases below.
 
-
+![alt text](openai-rest-models.png "Model deployments")
 
 ## Completions
 This is a really simple use case where you send a piece of test and it will attempt to "complete" what you started. A nice simple service.
