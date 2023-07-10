@@ -78,3 +78,55 @@ api-key: {{searchkey}}
   "fieldMappings" : [ ]
 }
 ```
+the above is a process that may take some time depending on the number of documents in the blob container.
+
+## Check status of indexer
+[Get Indexer Status](https://learn.microsoft.com/en-us/rest/api/searchservice/get-indexer-status)
+
+```
+### get indexer status
+GET https://{{searchservice}}.search.windows.net/indexers/{{newindexer}}/status?api-version=2020-06-30
+Content-Type: application/json  
+api-key: {{searchkey}}
+```
+When indexing is complete, it can be tested using an OpenAI call - referencing this new index.
+
+## Test Index with OpenAI Query
+```
+### chat with private data - over the new index, created above
+POST https://{{deployment}}.openai.azure.com/openai/deployments/{{model}}/extensions/chat/completions?api-version=2023-06-01-preview
+api-key: {{api-key}}
+Content-Type: application/json
+
+{
+    "messages": [
+        {
+            "role": "system",
+            "content": "You are a helpful AI assistant"
+        },
+        {
+            "role": "user",
+            "content": "what documents are there?"
+        }
+    ],
+    "dataSources": [
+        {
+            "type": "AzureCognitiveSearch",
+            "parameters": {
+                "endpoint": "https://{{searchservice}}.search.windows.net",
+                "key": "{{searchkey}}",
+                "indexName": "{{newindex}}"
+            }
+        }
+    ]
+}
+```
+If all goes well, this should return a result with a series of citations and some more interesting content:
+```
+ {
+          "index": 1,
+          "role": "assistant",
+          "content": "I have found 3 documents related to your query. Would you like me to provide you with more information about each document?",
+          "end_turn": true
+}
+```
