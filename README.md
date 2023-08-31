@@ -264,6 +264,9 @@ I get this response:
 So you can see here that the output of the chat can be tuned by the correct application of a *system* message! This is very powerful, considering its simplicity. You do need to tune this message in testing to make sure it works as expected.
 
 ## Chat Completions with Embeddings
+
+> :warning: ** THIS SECTION NEEDS TO BE REVISED AS EMBEDDING IS MORE ABOUT THE VECTOR REPRESENTATION OF TOKENS THAN JUST PRIVATE DATA **
+> 
 This example is a little more complex and follows the pattern of the Azure Sample [ChatGPT + Enterprise data with Azure OpenAI and Cognitive Search](https://github.com/Azure-Samples/azure-search-openai-demo)
 
 ![alt text](https://github.com/Azure-Samples/azure-search-openai-demo/raw/main/docs/appcomponents.png "Sample App")
