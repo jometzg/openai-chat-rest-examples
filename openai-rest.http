@@ -1,0 +1,323 @@
+
+### chat completion
+POST https://{{openaiendpoint}}.openai.azure.com/openai/deployments/{{openaichatmodel}}/chat/completions?api-version=2023-05-15
+api-key: {{openaikey}}
+Content-Type: application/json
+
+{
+    "messages": [
+        {
+            "role": "user",
+            "content": "Does Azure OpenAI support customer managed keys?"
+        }
+    
+    ]
+}
+
+### chat completion - but restrict output to Azure only conversations!!
+POST https://{{deployment}}.openai.azure.com/openai/deployments/{{openaichatmodel}}/chat/completions?api-version=2023-05-15
+api-key: {{openaikey}}
+Content-Type: application/json
+
+{
+    "messages": [
+        {
+            "role": "system",
+            "content": "You are an Azure-only assistant. Only give answers from Azure documentation. If the customer asks about another cloud provider, politely decline and respond that you are an Azure assistant."
+        },
+        {
+            "role": "user",
+            "content": "In AWS what is the container service called?"
+        }
+    
+    ]
+}
+
+### chat completion -multiple prompts AKA a conversation
+POST https://{{openaiendpoint}}.openai.azure.com/openai/deployments/{{openaichatmodel}}/chat/completions?api-version=2023-05-15
+api-key: {{openaikey}}
+Content-Type: application/json
+
+{
+    "messages": [
+        {
+            "role": "system",
+            "content": "You are an Azure-only assistant. Only give answers from Azure documentation. If the customer asks about another cloud provider, suggest the Azure equivalent."
+        },
+        {
+            "role": "user",
+            "content": "can I assign a managed identity to an Azure mail enabled AD group?"
+        },
+        {
+            "role": "user",
+            "content": "How do I grant the managed identity permissions to the mail enabled AD group?"
+        }
+    
+    ]
+}
+
+### chat with private data from an Azure Search index - which is over the employee handbook PDF
+POST https://{{openaiendpoint}}.openai.azure.com/openai/deployments/{{openaichatmodel}}/extensions/chat/completions?api-version=2023-06-01-preview
+api-key: {{openaikey}}
+Content-Type: application/json
+
+{
+    "messages": [
+        {
+            "role": "user",
+            "content": "what is the appraisal process?"
+        }
+    ],
+    "dataSources": [
+        {
+            "type": "AzureCognitiveSearch",
+            "parameters": {
+                "endpoint": "https://{{searchinstance}}.search.windows.net",
+                "key": "{{searchkey}}",
+                "indexName": "{{searchindex}}"
+            },
+            "inScope": true
+        }
+    ]
+}
+
+### get token count from text using Search
+POST https://{{searchinstance}}.search.windows.net/indexes/{{searchindex}}/analyze?api-version=2020-06-30
+Content-Type: application/json
+api-key: {{searchkey}}
+
+
+{
+  "text": "Contoso Electronics is a leader in the aerospace industry, providing advanced electronic 
+components for both commercial and military aircraft. We specialize in creating cutting-edge systems that are both reliable and efficient. Our mission is to provide the highest 
+quality aircraft components to our customers, while maintaining a commitment to safety 
+and excellence. We are proud to have built a strong reputation in the aerospace industry 
+and strive to continually improve our products and services. Our experienced team of 
+engineers and technicians are dedicated to providing the best products and services to our 
+customers. With our commitment to excellence, we are sure to remain a leader in the 
+aerospace industry for years to come.
+",
+  "analyzer": "standard"
+}
+
+
+### get embeddings from text
+POST https://{{openaiendpoint}}.openai.azure.com/openai/deployments/{{openaiembeddingmodel}}/embeddings?api-version=2023-06-01-preview
+api-key: {{openaikey}}
+Content-Type: application/json
+
+{
+  "input": "Contoso Electronics is a leader in the aerospace industry, providing advanced electronics.",
+  "user": "john"
+}
+
+
+### pulled from https://learn.microsoft.com/en-us/azure/cognitive-services/openai/reference#embeddings
+POST https://{{openaiendpoint}}.openai.azure.com/openai/deployments/{{openaichatmodel}}/extensions/chat/completions?api-version=2023-06-01-preview
+Content-Type: application/json
+api-key: {{openaikey}}
+
+{
+    "dataSources": [
+        {
+            "type": "AzureCognitiveSearch",
+            "parameters": {
+                "endpoint": "https://{{searchinstance}}.search.windows.net/",
+                "key": "{{searchkey}}",
+                "indexName": "{{searchindex}}",
+                "roleInformation": "Only answer questions on internal data. Tell the user that you are a private chatbot"
+            }
+        }
+    ],
+    "messages": [
+        {
+            "role": "user",
+            "content": "what documents are there?"
+        },
+         {
+            "role": "user",
+            "content": "who attended the meeting on data platform and APIs"
+        },
+        {
+            "role": "system",
+            "content": "Only answer questions on internal data. Tell the user that you are a private chatbot"
+        }
+    ]
+}
+
+
+### chat with private data
+POST https://{{openaiendpoint}}.openai.azure.com/openai/deployments/{{openaichatmodel}}/extensions/chat/completions?api-version=2023-06-01-preview
+api-key: {{openaikey}}
+Content-Type: application/json
+
+{
+    "messages": [
+        {
+            "role": "system",
+            "content": "You are a helpful AI assistant"
+        },
+        {
+            "role": "user",
+            "content": "what documents are there?"
+        }
+    ],
+    "dataSources": [
+        {
+            "type": "AzureCognitiveSearch",
+            "parameters": {
+                "endpoint": "https://{{searchinstance}}.search.windows.net",
+                "key": "{{searchkey}}",
+                "indexName": "{{searchindex}}"
+            }
+        }
+    ]
+}
+
+
+### query an existing index definition (created by AI Studio)
+GET https://{{searchinstance}}.search.windows.net/indexes/{{searchindex}}?api-version=2020-06-30  
+Content-Type: application/json  
+api-key: {{searchkey}}
+
+### AI Studio appeared to have created a data source and then deleted it
+### so recreate it - but pointing to the demo3 container (same name as the search index)
+POST https://{{searchinstance}}.search.windows.net/datasources?api-version=2020-06-30
+Content-Type: application/json
+api-key: {{searchkey}}
+
+{
+    "name" : "{{searchdatasource}}",
+    "type" : "azureblob",
+    "credentials" : { "connectionString" : "DefaultEndpointsProtocol=https;AccountName={{blobaccount}};AccountKey={{blobkey}};" },
+    "container" : { "name" : "{{blobcontainer}}", "query" : "" }
+}
+
+### now re-create the indexer definition (that must have been created, then deleted by AI Studio)
+POST https://{{searchinstance}}.search.windows.net/indexers?api-version=2020-06-30
+Content-Type: application/json
+api-key: {{searchkey}}
+
+{
+  "name" : "{{searchindexer}}",
+  "dataSourceName" : "{{searchdatasource}}",
+  "targetIndexName" : "{{searchindex}}",
+  "parameters": {
+      "batchSize": null,
+      "maxFailedItems": null,
+      "maxFailedItemsPerBatch": null,
+      "base64EncodeKeys": null,
+      "configuration": {
+          "indexedFileNameExtensions" : ".pdf,.docx",
+          "excludedFileNameExtensions" : ".png,.jpeg",
+          "dataToExtract": "contentAndMetadata",
+          "parsingMode": "default"
+      }
+  },
+  "schedule" : { },
+  "fieldMappings" : [ ]
+}
+
+### Re-run an indexer (if you have added new documents in the data source)
+POST https://{{searchinstance}}.search.windows.net/indexers/{{searchindexer}}/run?api-version=2020-06-30
+Content-Type: application/json
+api-key: {{searchkey}}
+
+### get indexer status (if you have added new documents in the data source)
+GET https://{{searchinstance}}.search.windows.net/indexers/{{searchindexer}}/status?api-version=2020-06-30
+api-key: {{searchkey}}
+
+
+
+
+
+
+### Azure Search population from blob storage
+
+### Create data source
+POST https://{{searchinstance}}.search.windows.net/datasources?api-version=2020-06-30
+Content-Type: application/json
+api-key: {{searchkey}}
+
+{
+    "name" : "{{searchdatasource}}",
+    "type" : "azureblob",
+    "credentials" : { "connectionString" : "DefaultEndpointsProtocol=https;AccountName={{blobaccount}};AccountKey={{blobkey}};" },
+    "container" : { "name" : "{{blobcontainer}}", "query" : "" }
+}
+
+### create indexer definition
+POST https://{{searchinstance}}.search.windows.net/indexes?api-version=2020-06-30
+Content-Type: application/json
+api-key: {{searchkey}}
+
+{
+    "name" : "{{searchdemoindexerdefinition}}",
+    "fields": [
+        { "name": "ID", "type": "Edm.String", "key": true, "searchable": false },
+        { "name": "content", "type": "Edm.String", "searchable": true, "filterable": false },
+        { "name": "metadata_storage_name", "type": "Edm.String", "searchable": false, "filterable": true, "sortable": true  },
+        { "name": "metadata_storage_size", "type": "Edm.Int64", "searchable": false, "filterable": true, "sortable": true  },
+        { "name": "metadata_storage_content_type", "type": "Edm.String", "searchable": false, "filterable": true, "sortable": true }       
+    ]
+}
+
+### create indexer (also populates index)
+POST https://{{searchinstance}}.search.windows.net/indexers?api-version=2020-06-30
+Content-Type: application/json
+api-key: {{searchkey}}
+
+{
+  "name" : "{{searchindexer}}",
+  "dataSourceName" : "{{searchdatasource}}",
+  "targetIndexName" : "{{searchdemoindexerdefinition}}",
+  "parameters": {
+      "batchSize": null,
+      "maxFailedItems": null,
+      "maxFailedItemsPerBatch": null,
+      "base64EncodeKeys": null,
+      "configuration": {
+          "indexedFileNameExtensions" : ".pdf,.docx",
+          "excludedFileNameExtensions" : ".png,.jpeg",
+          "dataToExtract": "contentAndMetadata",
+          "parsingMode": "default"
+      }
+  },
+  "schedule" : { },
+  "fieldMappings" : [ ]
+}
+
+
+### get indexer status
+GET https://{{searchinstance}}.search.windows.net/indexers/{{searchindexer}}/status?api-version=2020-06-30
+Content-Type: application/json  
+api-key: {{searchkey}}
+
+
+### chat with private data - over the new index, created above
+POST https://{{openaiendpoint}}.openai.azure.com/openai/deployments/{{openaichatmodel}}/extensions/chat/completions?api-version=2023-06-01-preview
+api-key: {{openaikey}}
+Content-Type: application/json
+
+{
+    "messages": [
+        {
+            "role": "system",
+            "content": "You are a helpful AI assistant"
+        },
+        {
+            "role": "user",
+            "content": "what documents are there?"
+        }
+    ],
+    "dataSources": [
+        {
+            "type": "AzureCognitiveSearch",
+            "parameters": {
+                "endpoint": "https://{{searchinstance}}.search.windows.net",
+                "key": "{{searchkey}}",
+                "indexName": "{{searchdemoindex}}"
+            }
+        }
+    ]
+}
