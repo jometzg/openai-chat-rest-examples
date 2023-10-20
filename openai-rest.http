@@ -15,7 +15,7 @@ Content-Type: application/json
 }
 
 ### chat completion - but restrict output to Azure only conversations!!
-POST https://{{deployment}}.openai.azure.com/openai/deployments/{{openaichatmodel}}/chat/completions?api-version=2023-05-15
+POST https://{{openaiendpoint}}.openai.azure.com/openai/deployments/{{openaichatmodel}}/chat/completions?api-version=2023-05-15
 api-key: {{openaikey}}
 Content-Type: application/json
 
@@ -28,6 +28,25 @@ Content-Type: application/json
         {
             "role": "user",
             "content": "In AWS what is the container service called?"
+        }
+    
+    ]
+}
+
+### chat completion - but restrict output to Azure only conversations!!
+POST https://{{openaiendpoint}}.openai.azure.com/openai/deployments/{{openaichatmodel}}/chat/completions?api-version=2023-05-15
+api-key: {{openaikey}}
+Content-Type: application/json
+
+{
+    "messages": [
+        {
+            "role": "system",
+            "content": "You are a helpful assistant"
+        },
+        {
+            "role": "user",
+            "content": "PII redact this sentence: My name is John, what can I do?"
         }
     
     ]
@@ -234,6 +253,13 @@ api-key: {{searchkey}}
 
 ### Azure Search population from blob storage
 
+
+### list data source
+GET https://{{searchinstance}}.search.windows.net/datasources?api-version=2020-06-30
+Content-Type: application/json
+api-key: {{searchkey}}
+
+
 ### Create data source
 POST https://{{searchinstance}}.search.windows.net/datasources?api-version=2020-06-30
 Content-Type: application/json
@@ -245,6 +271,12 @@ api-key: {{searchkey}}
     "credentials" : { "connectionString" : "DefaultEndpointsProtocol=https;AccountName={{blobaccount}};AccountKey={{blobkey}};" },
     "container" : { "name" : "{{blobcontainer}}", "query" : "" }
 }
+
+
+### list indexers
+GET https://{{searchinstance}}.search.windows.net/indexers?api-version=2020-06-30
+Content-Type: application/json
+api-key: {{searchkey}}
 
 ### create indexer definition
 POST https://{{searchinstance}}.search.windows.net/indexes?api-version=2020-06-30
@@ -287,6 +319,10 @@ api-key: {{searchkey}}
   "fieldMappings" : [ ]
 }
 
+### list indexes
+GET https://{{searchinstance}}.search.windows.net/indexes?api-version=2023-10-01-Preview
+Content-Type: application/json
+api-key: {{searchkey}}
 
 ### get indexer status
 GET https://{{searchinstance}}.search.windows.net/indexers/{{searchindexer}}/status?api-version=2020-06-30
