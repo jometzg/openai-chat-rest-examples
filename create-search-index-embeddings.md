@@ -3,7 +3,7 @@ This section shows a series of REST calls that can be made to create the search 
 
 This is a reverse-engineering of the steps used to generate the indexes with the OpenAI Studio chat with your own data. The solution accelerator sample application is referenced in this [public repository](https://github.com/microsoft/sample-app-aoai-chatGPT)
 
-A Visuaal Studio Code REST Client sample for this is also [here](./create-vector-index.http)
+A Visual Studio Code REST Client sample for this is also [here](./create-vector-index.http)
 
 ## Overall Process
 The overall process has essentially these steps:
@@ -12,6 +12,7 @@ The overall process has essentially these steps:
 3. Create an intermediate data source, index and indexer to populate the secondary blob container
 4. Create the main index using the secondary blob container as the source
 
+![alt text](./index-process-flow.png "Overall index process flow")
 
 ## Create the initial blob storage as an Azure Search data source 
 [Create Data Source](https://learn.microsoft.com/en-us/rest/api/searchservice/create-data-source)
