@@ -1,7 +1,9 @@
 # Create an Azure Search index from blob storage with embeddings
 This section shows a series of REST calls that can be made to create the search index that may be used later for OpenAI queues.
 
-This is a reverse-engineering of the steps used to generate the indexes with the OpenAI Studio chat with your own data. The solution accelerator sample application is referenced in this [public repo](https://github.com/microsoft/sample-app-aoai-chatGPT)
+This is a reverse-engineering of the steps used to generate the indexes with the OpenAI Studio chat with your own data. The solution accelerator sample application is referenced in this [public repository](https://github.com/microsoft/sample-app-aoai-chatGPT)
+
+A Visuaal Studio Code REST Client sample for this is also [here](./create-vector-index.http)
 
 ## Overall Process
 The overall process has essentially these steps:
