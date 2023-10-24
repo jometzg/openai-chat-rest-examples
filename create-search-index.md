@@ -3,7 +3,7 @@ This section shows a series of REST calls that can be made to create the search 
 
 This involves a number of steps outlined in the [Indexer operations Azure Cognitive Search REST API](https://learn.microsoft.com/en-us/rest/api/searchservice/indexer-operations) documentation.
 
-A more comprehensive sample using document chunking and embeddings is create-vector-index.http in this repo.
+A more comprehensive [sample](create-search-index-embeddings.md) using document chunking and embeddings is in this repo.
 
 
 ## Create a blob storage data source 
