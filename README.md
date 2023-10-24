@@ -263,9 +263,7 @@ I get this response:
 
 So you can see here that the output of the chat can be tuned by the correct application of a *system* message! This is very powerful, considering its simplicity. You do need to tune this message in testing to make sure it works as expected.
 
-## Chat Completions with Embeddings
-
-> :warning: **THIS SECTION NEEDS TO BE REVISED AS EMBEDDING IS MORE ABOUT THE VECTOR REPRESENTATION OF TOKENS THAN JUST PRIVATE DATA**
+## Chat Completions with Private Data
 
 This example is a little more complex and follows the pattern of the Azure Sample [ChatGPT + Enterprise data with Azure OpenAI and Cognitive Search](https://github.com/Azure-Samples/azure-search-openai-demo)
 
@@ -274,6 +272,8 @@ This example is a little more complex and follows the pattern of the Azure Sampl
 In this sample, the [Azure Search](https://learn.microsoft.com/en-us/azure/search/search-what-is-azure-search) is used to index some documents uploaded to Azure blob storage. The OpenAI then uses the Azure search index as it's data source. So the REST call uses both the OpenAI endpoint and also that of Azure Search - essentially it tells OpenAI to look in a specific Azure Search index for its source data and look there only.
 
 This sample uses a prepopulated Azure Search index as the data source. [This document](create-search-index.md) provides more details on how to populate the Azure Search index with data from blob storage.
+
+Alternatively, a more complex method of generating a hybrid search index with embedding is described [here](create-search-index-embeddings.md)
 
 This is very powerful and so can have numerous uses cases inside a business, one example being an HR bot which looks only at internal HR documentation that is employee-facing.
 
