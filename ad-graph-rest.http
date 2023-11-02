@@ -1,0 +1,23 @@
+### This is the ROPC https://learn.microsoft.com/en-us/entra/identity-platform/v2-oauth-ropc
+# @name auth
+POST https://login.microsoftonline.com/{{tenant}}/oauth2/v2.0/token
+Content-Type: application/x-www-form-urlencoded
+
+client_id={{clientid}}
+&client_secret={{secret}}
+&scope=user.read%20openid%20profile%20offline_access
+&username={{email}}
+&password={{password}}
+&grant_type=password
+
+### grab the access token for graph calls
+@test_token={{auth.response.body.access_token}}
+
+### now graph stuff https://developer.microsoft.com/en-us/graph/graph-explorer
+### now call the "me" endpoint
+GET https://graph.microsoft.com/v1.0/me
+Authorization: Bearer {{test_token}}
+
+### now get the list of groups that the user belongs to
+GET https://graph.microsoft.com/v1.0/me/transitiveMemberOf/microsoft.graph.group?$count=true
+Authorization: Bearer {{test_token}}
