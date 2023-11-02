@@ -19,6 +19,25 @@ client_id={{clientid}}
 &password={{password}}
 &grant_type=password
 ```
+As can be seen above, these require some settings, which can be created under a **.vscode** folder as a file **settings.json**. These allow you to remove secrets from the HTTP file. These settings also require a service principal whose clientid and secret are used below:
+
+```
+{
+    "rest-client.environmentVariables": {
+        "contoso": {
+            "tenant": "XXXXXXX",
+            "user": "johntest",
+            "email": "johntest@XXXXX.com",
+            "password": "XXXXXXXX",
+            "clientid": "XXXXXXXX",
+            "secret": "XXXXXXXX"
+        
+        },
+        "$shared": {           
+        }
+    }
+}
+```
 
 ## The Graph "me" endpoint
 ```
