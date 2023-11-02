@@ -20,12 +20,12 @@ See the [REST example](./filtered-index.http)
 
 ## Create AD Groups
 
-![alt text](./images/set-ad-groups.png "set AD groups")
+![alt text](./set-ad-groups.png "set AD groups")
 
 ## Add User membership to these groups
-![alt text](./images/set-ad-group-membership.png "set AD groups")
+![alt text](./set-ad-group-membership.png "set AD groups")
 
 ## Set blob meta data
 See the guide on [document-level access control](https://learn.microsoft.com/en-us/azure/ai-services/openai/concepts/use-your-data#document-level-access-control) 
 
-![alt text](./images/set-blob-meta-data.png "Set blob meta data")
+![alt text](./set-blob-meta-data.png "Set blob meta data")
