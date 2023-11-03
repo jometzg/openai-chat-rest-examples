@@ -42,4 +42,5 @@ This code is present in the sample application:
 
 ![alt text](./build-filter-criteria.png "Document fragments")
 
+As can be seen from above, the *fetchUserGroups* method calls Microsoft Graph to retrieve the user's AD group membership (as a series of IDs) and the method *generateFilterString* uses that array of groups to build a filter predicate which is appended to the OpenAI with data call.
 
