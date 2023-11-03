@@ -17,7 +17,9 @@ One way to do this is to associate the user with An Azure AD Group (Entra ID gro
 11. When ssearching this then only queries document fragments that meeet the filter criteria.
 
 ## Setting up the indexes
-See the [REST example](./filtered-index.http)
+Building the indexes correctly is important as these need to be extended to include a new field *group_ids* and populated from meta-data added to the blobs uploaded into blob storage.
+
+The process to do this is documented in the [REST example](./filtered-index.http)
 
 ## Create AD Groups
 
