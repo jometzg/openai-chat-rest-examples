@@ -18,7 +18,7 @@ Above shows VS Code connected to a remote VM itself running the REST client show
 
 You can also configure environment variables to be injected in, so that secrets are not displayed or stored in the REST client HTTP files.
 
-## Azure Resourse Private Endpoints
+## Azure Resource Private Endpoints
 The following need to be configured to have a private endpoint:
 1. the Azure Search service itself
 2. The blob storage account
