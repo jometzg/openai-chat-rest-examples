@@ -10,5 +10,6 @@ There are a number of ways of building and populating Search indexes, and these 
 
 Ideally, this should be in customer managed GitHub Runner or DevOps build agent in the same virtual network.
 
-For a more interactive approach, Visual Studio Code can be configured to remotely connect to a virtual machine and then API or REST requests initiated from VS Code - but these will run inside the connected VM.
+For a more interactive approach, Visual Studio Code can be [configured](https://code.visualstudio.com/docs/remote/ssh-tutorial) to remotely connect to a virtual machine and then API or REST requests initiated from VS Code - but these will run inside the connected VM.
 
+![alt text](./vscode-remote-vm-rest.png "VS Code Remote to VM")
