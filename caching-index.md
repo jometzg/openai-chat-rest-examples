@@ -187,7 +187,7 @@ This then results in some JSON where the index returns with the most likely hot 
 
 ```
 {
-  "@odata.context": "https://jjjdemosearch.search.windows.net/indexes('testindex')/$metadata#docs(*)",
+  "@odata.context": "https://XXXXXXX.search.windows.net/indexes('testindex')/$metadata#docs(*)",
   "@odata.count": 3,
   "value": [
     {
