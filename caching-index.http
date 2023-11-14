@@ -1,0 +1,196 @@
+### this demonstrates the use of Azure Search as a vector search cache for OpenAI
+
+### test index name
+@testindex=testindex
+
+### create an index with a vector search configuration
+POST https://{{searchinstance}}.search.windows.net/indexes?api-version=2023-07-01-Preview 
+Content-Type: application/json
+api-key: {{searchkey}}
+
+{
+    "name" : "{{testindex}}",
+      "fields": [
+        { "name": "content", "type": "Edm.String", "searchable": true,  "filterable": false, "retrievable": true },
+        { "name": "last_updated","type": "Edm.String", "searchable": false, "filterable": false, "retrievable": true },
+        { "name": "title",   "type": "Edm.String", "searchable": true,  "filterable": false, "retrievable": true },
+        { "name": "id",      "type": "Edm.String", "searchable": false, "filterable": true,  "retrievable": true, "sortable": true, "key": true },
+        { "name": "contentVector","type": "Collection(Edm.Single)", "searchable": true, "filterable": false, "retrievable": true, "sortable": false, "facetable": false, "key": false, "dimensions": 1536, "vectorSearchConfiguration": "default" }       
+    ],
+    "similarity": {
+      "@odata.type": "#Microsoft.Azure.Search.BM25Similarity",
+      "k1": null,
+      "b": null
+    },
+  "semantic": {
+    "defaultConfiguration": null,
+    "configurations": [
+      {
+        "name": "default",
+        "prioritizedFields": {
+          "titleField": {
+            "fieldName": "title"
+          },
+          "prioritizedContentFields": [
+            {
+              "fieldName": "content"
+            }
+          ],
+          "prioritizedKeywordsFields": []
+        }
+      }
+    ]
+  },
+  "vectorSearch": {
+    "algorithmConfigurations": [
+      {
+        "name": "default",
+        "kind": "hnsw",
+        "hnswParameters": {
+          "metric": "cosine",
+          "m": 4,
+          "efConstruction": 400,
+          "efSearch": 1000
+        },
+        "exhaustiveKnnParameters": null
+      }
+    ]
+  }
+}
+
+
+@first_question = what is the appraisal process
+### generate a vector for later search
+# @name firstvector
+POST https://{{openaiendpoint}}.openai.azure.com/openai/deployments/{{openaiembeddingmodel}}/embeddings?api-version=2023-06-01-preview
+Content-Type: application/json
+api-key: {{openaikey}}
+
+{
+    "input": "{{first_question}}"
+}
+
+### get vector from response
+@question_one_vector = {{firstvector.response.body.data[0].embedding}}
+
+
+@second_question = what is the appraisal process like
+### generate a vector for later search
+# @name secondvector
+POST https://{{openaiendpoint}}.openai.azure.com/openai/deployments/{{openaiembeddingmodel}}/embeddings?api-version=2023-06-01-preview
+Content-Type: application/json
+api-key: {{openaikey}}
+
+{
+    "input": "{{second_question}}"
+}
+
+###
+@question_two_vector = {{secondvector.response.body.data[0].embedding}}
+
+### now a completely different question
+@different_question = what is App Services
+### generate a vector for later search
+# @name threevector
+POST https://{{openaiendpoint}}.openai.azure.com/openai/deployments/{{openaiembeddingmodel}}/embeddings?api-version=2023-06-01-preview
+Content-Type: application/json
+api-key: {{openaikey}}
+
+{
+    "input": "{{different_question}}"
+}
+
+###
+@question_three_vector = {{threevector.response.body.data[0].embedding}}
+
+### upload the three vectors to the index
+POST https://{{searchinstance}}.search.windows.net/indexes/{{testindex}}/docs/index?api-version=2023-07-01-Preview    
+Content-Type: application/json   
+api-key: {{searchkey}}
+
+{
+  "value": [
+    {
+      "@search.action": "mergeOrUpload",
+      "id": "1",
+      "content": "some content referring to the appraisal process",
+      "title": "some title",
+      "last_updated": "2023-11-14T00:00:00Z",
+      "contentVector": {{question_one_vector}}
+    },
+     {
+      "@search.action": "mergeOrUpload",
+      "id": "2",
+      "content": "some content refering to the appraisal process again",
+      "title": "some title",
+      "last_updated": "2021-10-01T00:00:00Z",
+      "contentVector": {{question_two_vector}}
+    },
+    {
+      "@search.action": "mergeOrUpload",
+      "id": "3",
+      "content": "some content refering to app services",
+      "title": "some title",
+      "last_updated": "2021-10-01T00:00:00Z",
+      "contentVector": {{question_three_vector}}
+    }
+  ]
+}
+
+### search an index with a different vector of the same similarity
+POST https://{{searchinstance}}.search.windows.net/indexes/{{testindex}}/docs/search?api-version=2023-10-01-Preview
+Content-Type: application/json
+api-key: {{searchkey}}
+
+{
+    "count": true,
+    "select": "content, id",
+    "vectorQueries": [
+        {
+            "kind": "vector",
+            "vector": {{question_one_vector}},
+            "exhaustive": true,
+            "fields": "contentVector",
+            "k": 5
+        }
+    ]
+}
+
+### search an index with a different vector of the same similarity
+POST https://{{searchinstance}}.search.windows.net/indexes/{{testindex}}/docs/search?api-version=2023-10-01-Preview
+Content-Type: application/json
+api-key: {{searchkey}}
+
+{
+    "count": true,
+    "select": "content, id",
+    "vectorQueries": [
+        {
+            "kind": "vector",
+            "vector": {{question_two_vector}},
+            "exhaustive": true,
+            "fields": "contentVector",
+            "k": 5
+        }
+    ]
+}
+
+### search an index with a different vector of low similarity
+POST https://{{searchinstance}}.search.windows.net/indexes/{{testindex}}/docs/search?api-version=2023-10-01-Preview
+Content-Type: application/json
+api-key: {{searchkey}}
+
+{
+    "count": true,
+    "select": "content, id",
+    "vectorQueries": [
+        {
+            "kind": "vector",
+            "vector": {{question_three_vector}},
+            "exhaustive": true,
+            "fields": "contentVector",
+            "k": 5
+        }
+    ]
+}
+
