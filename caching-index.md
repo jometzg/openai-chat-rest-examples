@@ -76,7 +76,7 @@ api-key: {{searchkey}}
 ```
 The above has responses in the content field and a vector index. I suspect the columns in this index can be firther reduced.
 
-### Generate emdeddings (vectors) for a question
+### Generate embeddings (vectors) for a question
 ```
 @first_question = what is the appraisal process
 ### generate a vector for later search
@@ -211,3 +211,11 @@ This then results in some JSON where the index returns with the most likely hot 
 As can be seen from above, the exact match his a search_score of 1.0, but a really similar question 0.959. A much less similar question has a 0.80 similarity.
 
 In an application, it is most likely best to pick only the first response if it is above a certain threshold of similarity.
+
+### Other Concerns
+For this pattern to be really useful for an application, some thought may be given to:
+1. The *search_score* threshold that represents a real hit. This may need some experimentation. See [relevance and ranking in vector search](https://learn.microsoft.com/en-us/azure/search/vector-search-ranking)
+2. Aging the values out of the Search index so this does not continue to grow.
+3. the efficacy of this strategy on longer chat conversations.
+4. Whether to use the same Azure Search instant for this caching as the main document indexes (this will use a different index to the main document indices regardless).
+5. Whether the use of Azure Redis Cache for this capability would be more operationally efficient.
