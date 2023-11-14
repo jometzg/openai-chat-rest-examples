@@ -16,7 +16,7 @@ Whilst Azure Search is not strictly-speaking a cache, it may be used as one if A
 So an index can be constructed that uses the vector representation of a question alongside the previous OpenAI response to this question.
 
 ## In Detail
-The HTTP REST cals for an example of this is [here](./caching_index.http)
+The HTTP REST calls for an example of this is [here](./caching-index.http)
 
 ### Build an Index
 ```
