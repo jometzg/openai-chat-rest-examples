@@ -8,7 +8,7 @@ The challenge is that whilst users of a chat may ask similar questions, they don
 As *embeddings* are a vector representation of some concept, we can use this idea to build a cache of questions and responses for a chat application.
 
 ## How Caching works
-In this approach, we make use of OpenAI vector embeddings to build a vector representation of a user's question and then when the question is answered, the response stored in a cache. When later querying as cache, the question is turned into a vector and the cache is queried for the *nearest* hit - that is vector representations that are most similar to the question. It is quite likely that very similar questions will be close vector representations, so the nearest or highest score hit on the cache is likely a very similar question and this can be pulled from the cache. This is a *cache-aside* pattern.
+In this approach, we make use of OpenAI vector embeddings to build a vector representation of a user's question and then when the question is answered, the response stored in a cache. When later querying as cache, the question is turned into a vector and the cache is queried for the *nearest* hit - that is vector representations that are most similar to the question. It is quite likely that very similar questions will be close vector representations, so the nearest or highest score hit on the cache is likely a very similar question and this can be pulled from the cache. This is a [cache-aside](https://learn.microsoft.com/en-us/azure/architecture/patterns/cache-aside) pattern.
 
 ## Using Azure Search as a cache
 Whilst Azure Search is not strictly-speaking a cache, it may be used as one if Azure Search is already being used for indexing documents for OpenAI with-data queries.
