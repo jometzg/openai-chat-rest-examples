@@ -1,5 +1,5 @@
 # Using Azure Search as a caching index
-The usual use case of Azure Search is that to search for items or documents. In OpenAI with-data use cases, Azure Search is to find document fragments that have been indexed from documents uploaded to blob storage. In this way a user can ground OpenAI queries on internal data.
+The usual use case of Azure Search is that to search for items or documents. In OpenAI with-data use cases, Azure Search is used to find document fragments that have been indexed from documents uploaded to blob storage. In this way a user can ground OpenAI queries on internal data.
 
 It also may be useful to cache OpenAI responses to reduce the burden on OpenAI as a backend - this is potentially important if the quota is not quite sufficient.
 
