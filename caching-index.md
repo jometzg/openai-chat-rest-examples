@@ -161,7 +161,7 @@ api-key: {{searchkey}}
 }
 ```
 
-The above is to add/update these items in the index for testing. In a normal app, the documents will be individually added to the index as part of a cache-aside pattern in the application.
+The above is to add/update these items in the index for testing. In a normal app, the documents will be individually added to the index as part of a cache-aside pattern in the application. The *content* field will be also set to the OpenAI response.
 
 ### Query the index for results
 ```
