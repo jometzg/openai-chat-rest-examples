@@ -2,6 +2,17 @@
 ### this scenario is on where the indexes will have filters that use the Azure AD group ID
 ### the documents will be in the same storage account, but different containers
 
+### pre-requisites
+### 1. create a storage account 
+### 2. create a search service
+### 3. create an openai deployment with the chat model
+### 4. create an openai deployment with the embedding model
+### 5. create an Azure AD group for the US users
+### 6. create an Azure AD group for the India users
+### 7. create a blob container for the US documents
+### 8. create a blob container for the India documents
+### 9. create a blob container for the chunks
+
 ### Create India data source
 POST https://{{searchinstance}}.search.windows.net/datasources?api-version=2020-06-30
 Content-Type: application/json
