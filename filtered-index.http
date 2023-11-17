@@ -39,7 +39,7 @@ api-key: {{searchkey}}
         { "name": "content", "type": "Edm.String", "searchable": true, "filterable": false },
         { "name": "url", "type": "Edm.String", "searchable": true, "filterable": false },
         { "name": "filename", "type": "Edm.String", "searchable": true, "filterable": false },
-        { "name": "group_ids", "type": "Collection(Edm.String)", "filterable": true },
+        { "name": "{{sourcefield}}", "type": "Collection(Edm.String)", "filterable": true },
         { "name": "metadata_storage_name", "type": "Edm.String", "searchable": false, "filterable": true, "sortable": true  },
         { "name": "metadata_storage_size", "type": "Edm.Int64", "searchable": false, "filterable": true, "sortable": true  },
         { "name": "metadata_storage_content_type", "type": "Edm.String", "searchable": false, "filterable": true, "sortable": true }       
@@ -156,8 +156,8 @@ api-key: {{searchkey}}
                 "inputs": []
               },
               {
-                "name": "group_ids",
-                "source": "/document/group_ids",
+                "name": "{{sourcefield}}",
+                "source": "/document/{{sourcefield}}",
                 "sourceContext": null,
                 "inputs": []
               }
@@ -218,8 +218,8 @@ api-key: {{searchkey}}
       "mappingFunction": null
   },
   {
-      "sourceFieldName": "group_ids",
-      "targetFieldName": "group_ids",
+      "sourceFieldName": "{{sourcefield}}",
+      "targetFieldName": "{{targetfield}}",
       "mappingFunction": null
   }
   ]
@@ -269,8 +269,8 @@ api-key: {{searchkey}}
       "mappingFunction": null
   },
   {
-      "sourceFieldName": "group_ids",
-      "targetFieldName": "group_ids",
+      "sourceFieldName": "{{sourcefield}}",
+      "targetFieldName": "{{targetfield}}",
       "mappingFunction": null
   }
   ]
@@ -312,7 +312,7 @@ api-key: {{searchkey}}
     { "name": "id",      "type": "Edm.String", "searchable": false, "filterable": true,  "retrievable": true, "sortable": true, "key": true },
     { "name": "chunk_id","type": "Edm.String", "searchable": false, "filterable": false, "retrievable": true  },
     { "name": "last_updated","type": "Edm.String", "searchable": false, "filterable": false, "retrievable": true },
-    { "name": "group_ids", "type": "Collection(Edm.String)", "filterable": true },
+    { "name": "{{targetfield}}", "type": "Collection(Edm.String)", "filterable": true },
     { "name": "contentVector","type": "Collection(Edm.Single)", "searchable": true, "filterable": false, "retrievable": true, "sortable": false, "facetable": false, "key": false, "dimensions": 1536, "vectorSearchConfiguration": "default" }       
     ],
     "similarity": {
@@ -412,7 +412,7 @@ Content-Type: application/json
                 "key": "{{searchkey}}",
                 "indexName": "{{newindex}}",
                 "inScope": false,
-                "filter": "group_ids/any(g:search.in(g, '{{usfilter}}'))"
+                "filter": "{{targetfield}}/any(g:search.in(g, '{{usfilter}}'))"
             }
         }
     ]
@@ -439,7 +439,7 @@ Content-Type: application/json
                 "key": "{{searchkey}}",
                 "indexName": "{{newindex}}",
                 "inScope": false,
-                "filter": "group_ids/any(g:search.in(g, '{{indiafilter}}'))"
+                "filter": "{{targetfield}}/any(g:search.in(g, '{{indiafilter}}'))"
             }
         }
     ]
