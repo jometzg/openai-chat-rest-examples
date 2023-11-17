@@ -8,10 +8,11 @@ The intention is to give low-level information to those that develop with OpenAI
 
 1. [Basic Introduction to OpenAI chat with REST](./intro.md)
 2. [Create an Azure Search index from blob storage](./create-search-index.md)
-3. [Create Search indexes on non-public Search and Storage](./create-private-search-index.md)
-4. [Exploring how to use Microsoft Graph](./ad-graph-rest.md)
-5. [Create Search indexes on non-public Search and Storage](./create-private-search-index.md)
-6. [Implementing Filtered Search with Embeddings](./filtered-search-with-embeddings.md)
-7. [Using Azure Search as a caching index](./caching-index.md)
+3. [Create an Azure Search index from blob storage with embeddings](./create-search-index-embeddings.md)
+4. [Create Search indexes on non-public Search and Storage](./create-private-search-index.md)
+5. [Exploring how to use Microsoft Graph](./ad-graph-rest.md)
+6. [Create Search indexes on non-public Search and Storage](./create-private-search-index.md)
+7. [Implementing Filtered Search with Embeddings](./filtered-search-with-embeddings.md)
+8. [Using Azure Search as a caching index](./caching-index.md)
    
 
