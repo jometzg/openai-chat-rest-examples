@@ -7,7 +7,7 @@ The intention is to give low-level information to those that develop with OpenAI
 ## Documents
 
 1. [Basic Introduction to OpenAI chat with REST](./intro.md)
-2. [Create an Azure Search index from blob storage](/.create-search-index.md)
+2. [Create an Azure Search index from blob storage](./create-search-index.md)
 3. [Create Search indexes on non-public Search and Storage](./create-private-search-index.md)
 4. [Exploring how to use Microsoft Graph](./ad-graph-rest.md)
 5. [Create Search indexes on non-public Search and Storage](./create-private-search-index.md)
